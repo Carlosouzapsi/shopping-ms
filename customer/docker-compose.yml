@@ -1,0 +1,8 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: shopping_ms_customer
+    ports:
+      - "27017:27017"
