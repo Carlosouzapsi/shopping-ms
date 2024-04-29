@@ -1,9 +1,9 @@
 const STATUS_CODES = {
   OK: 200,
   BAD_REQUEST: 400,
-  UN_AUTHORIZED: 403,
+  UN_AUTHORISED: 403,
   NOT_FOUND: 404,
-  INTERNAR_ERROR: 500,
+  INTERNAL_ERROR: 500,
 };
 
 class AppError extends Error {
@@ -13,24 +13,24 @@ class AppError extends Error {
     description,
     isOperational,
     errorStack,
-    loggingErrorResponse
+    logingErrorResponse
   ) {
     super(description);
-    Object.setPrototypeOfOf(this, new.target.prototype);
+    Object.setPrototypeOf(this, new.target.prototype);
     this.name = name;
     this.statusCode = statusCode;
     this.isOperational = isOperational;
     this.errorStack = errorStack;
-    this.logError = loggingErrorResponse;
+    this.logError = logingErrorResponse;
     Error.captureStackTrace(this);
   }
 }
 
-// API Specific Errors
+//api Specific Errors
 class APIError extends AppError {
   constructor(
     name,
-    statusCode = STATUS_CODES.INTERNAR_ERROR,
+    statusCode = STATUS_CODES.INTERNAL_ERROR,
     description = "Internal Server Error",
     isOperational = true
   ) {
@@ -38,16 +38,16 @@ class APIError extends AppError {
   }
 }
 
-// 400
+//400
 class BadRequestError extends AppError {
-  constructor(description = "Bad request", loggingErrorResponse) {
+  constructor(description = "Bad request", logingErrorResponse) {
     super(
       "NOT FOUND",
       STATUS_CODES.BAD_REQUEST,
       description,
       true,
       false,
-      loggingErrorResponse
+      logingErrorResponse
     );
   }
 }

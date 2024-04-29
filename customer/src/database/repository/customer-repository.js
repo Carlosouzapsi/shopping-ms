@@ -7,7 +7,7 @@ const {
 
 class CustomerRepository {
   async CreateCustomer({ email, password, phone, salt }) {
-    // Inserir regras de negócio de email diferente..
+
     try {
       const customer = new CustomerModel({
         email,
@@ -18,9 +18,9 @@ class CustomerRepository {
       const customerResult = await customer.save();
       return customerResult;
     } catch (err) {
-      throw APIError(
+      throw new APIError(
         "API Error",
-        STATUS_CODES.INTERNAR_ERROR,
+        STATUS_CODES.INTERNAL_ERROR,
         "Unable to Create Customer"
       );
     }
@@ -44,9 +44,9 @@ class CustomerRepository {
 
       return await profile.save();
     } catch (error) {
-      throw APIError(
+      throw new APIError(
         "API Error",
-        STATUS_CODES.INTERNAR_ERROR,
+        STATUS_CODES.INTERNAL_ERROR,
         "Error on Create Address"
       );
     }
@@ -59,8 +59,159 @@ class CustomerRepository {
     } catch (err) {
       throw new APIError(
         "API Error",
-        STATUS_CODES_INTERNAL_ERROR,
+        STATUS_CODES.INTERNAL_ERROR,
         "Unable to Find Customer"
+      );
+    }
+  }
+
+  async FindCustomerById({ id }) {
+    try {
+      const existingCustomer = await CustomerModel.findById(id).populate(
+        "address"
+      );
+      return existingCustomer;
+    } catch (err) {
+      throw new APIError(
+        "API Error",
+        STATUS_CODES_INTERNAL_ERROR,
+        "Unable to find Customer"
+      );
+    }
+  }
+
+  // WIP - Escrever teste unitário
+  async WishList(customerId) {
+    try {
+      const profile = await CustomerModel.findById(customerId).populate(
+        "wishlist"
+      );
+      return profile.wishlist;
+    } catch (err) {
+      throw new APIError(
+        "API Error",
+        STATUS_CODES.INTERNAL_ERROR,
+        "Unable to Get Wishlist"
+      );
+    }
+  }
+
+  // TODO - Escrever teste unitário
+  async AddWishlistItem(
+    customerId,
+    { _id, name, desc, price, available, banner }
+  ) {
+    const product = {
+      _id,
+      name,
+      desc,
+      price,
+      available,
+      banner,
+    };
+
+    try {
+      const profile = CustomerModel.findById(customerId).populate("wishlist");
+      if (profile) {
+        let wishlist = profile.wishlist;
+        if (wishlist.length > 0) {
+          let isExist = false;
+          wishlist.map((item) => {
+            if (item._id.toString() === product._id.toString()) {
+              const index = wishlist.indexOf(item);
+              wishlist.splice(index, 1);
+              isExist = true;
+            }
+          });
+
+          if (!isExist) {
+            wishlist.push(product);
+          }
+        } else {
+          wishlist.push(product);
+        }
+
+        profile.wishlist = wishlist;
+      }
+      const profileResult = await profile.save();
+      return profileResult.wishList;
+    } catch (err) {
+      throw new APIError(
+        "API Error",
+        STATUS_CODES.INTERNAL_ERROR,
+        "Unable to Add to WishList"
+      );
+    }
+  }
+  async addCartItem(customerId, { _id, name, price, banner }, qty, isRemove) {
+    try {
+      const profile = await CustomerModel.findById(customerId).populate("cart");
+
+      if (profile) {
+        const cartItem = {
+          product: { _id, name, price, banner },
+          unit: qty,
+        };
+
+        let cartItems = profile.cart;
+
+        if (cartItems.length > 0) {
+          let isExist = false;
+          cartItems.map((item) => {
+            if (item.product._id.toString() === product._id.toString()) {
+              if (isRemove) {
+                cartItems.splice(cartItems.indexOf(item), 1);
+              } else {
+                item.unit = qty;
+              }
+              isExist = true;
+            }
+          });
+
+          if (!isExist) {
+            cartItems.push(cartItem);
+          }
+        } else {
+          cartItems.push(cartItem);
+        }
+
+        const cartSaveResult = await profile.save();
+
+        return cartSaveResult;
+      }
+
+      throw new Error("Unable to add to cart!");
+    } catch (error) {
+      throw new APIError(
+        "API Error",
+        STATUS_CODES.INTERNAL_ERROR,
+        "Unable to Create Customer"
+      );
+    }
+  }
+
+  async AddOrderProfile(customerId, order) {
+    try {
+      const profile = await CustomerModel.findById(customerId);
+
+      if (profile) {
+        if (profile.orders === undefined) {
+          profile.orders = [];
+        }
+        profile.orders.push(order);
+
+        profile.cart = [];
+
+        const profileResult = await profile.save();
+        return profileResult;
+      }
+
+      throw new Error("Unable to add to order!");
+    } catch (error) {
+      throw new APIError(
+        "API Error",
+        STATUS_CODES.INTERNAL_ERROR,
+        "Unable to Create Customer"
       );
     }
   }
