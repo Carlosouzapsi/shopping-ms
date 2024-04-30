@@ -7,6 +7,8 @@ let mongoServer;
 
 const customerRepository = new CustomerRepository();
 
+/* Configurar arquivo jest para rodar testes de integração
+separados dos unitários */
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
   const mongoUri = await mongoServer.getUri();
@@ -18,7 +20,7 @@ afterAll(async () => {
   await mongoServer.stop();
 });
 
-describe.skip("customer tests", () => {
+describe("customer tests", () => {
   it("Should create a new customer", async () => {
     const customerResult = await customerRepository.CreateCustomer({
       email: "test1@email.com",
@@ -88,7 +90,7 @@ describe.skip("customer tests", () => {
     expect(customerResultFindById.phone).toBe(baseCustomer.phone);
   });
   // TODO
-  it("Should add an item at the wish list", async () => {
+  it.skip("Should add an item at the wish list", async () => {
     const baseCustomer = await customerRepository.CreateCustomer({
       email: "test6@email.com",
       password: "1234",

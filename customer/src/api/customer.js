@@ -8,7 +8,6 @@ module.exports = (app) => {
     try {
       const { email, password, phone } = req.body;
       const { data } = await service.signUp({ email, password, phone });
-      // return res.json(data);
       return res.status(201).json({
         message: "Customer signed up successfully",
         data: data,

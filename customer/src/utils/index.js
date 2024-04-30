@@ -1,7 +1,6 @@
+const { APP_SECRET } = require("../database");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
-const { APP_SECRET } = require("../config");
 
 // Utility functions
 module.exports.GenerateSalt = async () => {
@@ -22,7 +21,8 @@ module.exports.ValidatePassword = async (
 
 module.exports.GenerateSignature = async (payload) => {
   try {
-    return await jwt.sign(payload, APP_SECRET, { expiresIn: "30d" });
+    return await jwt.sign(payload, "jg_youtube_tutorial", { expiresIn: "30d" });
+    // return await jwt.sign(payload, APP_SECRET, { expiresIn: "30d" });
   } catch (err) {
     console.log(err);
     return err;
