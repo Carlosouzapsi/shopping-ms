@@ -37,7 +37,6 @@ describe("Signin and signup tests", () => {
       .expect(201);
     expect(response.body.message).toBe("Customer signed up successfully");
     expect(response.body.data).toHaveProperty("id");
-    expect(response.body.data).toHaveProperty("token");
   });
 
   it("Should do login with valid credentials", async () => {
@@ -52,5 +51,7 @@ describe("Signin and signup tests", () => {
       .post("/customer/login")
       .send({ email: userData.email, password: userData.password })
       .expect(200);
+
+    expect(response.body.data).toHaveProperty("token");
   });
 });
