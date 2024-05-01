@@ -7,11 +7,11 @@ const {
 
 class CustomerRepository {
   async CreateCustomer({ email, password, phone, salt }) {
-
     try {
       const customer = new CustomerModel({
         email,
         password,
+        salt,
         phone,
         address: [],
       });

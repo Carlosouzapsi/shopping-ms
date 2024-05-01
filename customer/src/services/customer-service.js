@@ -31,7 +31,7 @@ class CustomerService {
             email: existingCustomer.email,
             _id: existingCustomer._id,
           });
-          return FormateData({ id: existingCustomer, _id, token });
+          return FormateData({ id: existingCustomer._id, token });
         }
       }
 
@@ -46,7 +46,6 @@ class CustomerService {
 
     try {
       let salt = await GenerateSalt();
-
       let userPassword = await GeneratePassword(password, salt);
 
       const existingCustomer = await this.repository.CreateCustomer({

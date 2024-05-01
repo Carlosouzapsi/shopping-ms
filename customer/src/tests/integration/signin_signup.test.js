@@ -1,6 +1,6 @@
 const express = require("express");
 const request = require("supertest");
-const { CustomerService } = require("../../services/customer-service");
+const CustomerService = require("../../services/customer-service");
 const { DB_URL } = require("../../config");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const mongoose = require("mongoose");
@@ -41,7 +41,16 @@ describe("Signin and signup tests", () => {
   });
 
   it("Should do login with valid credentials", async () => {
-    const createUser = await customerService.signUp({ email, password, phone });
-    console.log(createUser);
+    const userData = {
+      email: "test2@mail.com",
+      password: "1234",
+      phone: "1199999999",
+    };
+    const user = await customerService.signUp(userData);
+
+    const response = await request(app)
+      .post("/customer/login")
+      .send({ email: userData.email, password: userData.password })
+      .expect(200);
   });
 });
