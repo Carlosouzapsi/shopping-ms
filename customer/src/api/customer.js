@@ -16,4 +16,18 @@ module.exports = (app) => {
       next(err);
     }
   });
+
+  app.post("/customer/login", async (req, res, next) => {
+    try {
+      const { email, password } = req.body;
+
+      const { data } = await service.signIn({ email, password });
+
+      return res.status(200).json({
+        data: data,
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
 };

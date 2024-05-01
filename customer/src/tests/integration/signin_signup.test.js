@@ -1,13 +1,13 @@
 const express = require("express");
 const request = require("supertest");
-const customer = require("../../api/customer");
+const { CustomerService } = require("../../services/customer-service");
 const { DB_URL } = require("../../config");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const mongoose = require("mongoose");
 const expressApp = require("../../express-app");
 
 const app = new express();
-
+const customerService = new CustomerService();
 /* Configurar arquivo jest para rodar testes de integração
 separados dos unitários */
 
@@ -25,7 +25,7 @@ afterAll(async () => {
 });
 
 describe("Signin and signup tests", () => {
-  it.only("Should create a new user using valid credentials", async () => {
+  it("Should create a new user using valid credentials", async () => {
     const userData = {
       email: "test2@mail.com",
       password: "1234",
@@ -40,7 +40,8 @@ describe("Signin and signup tests", () => {
     expect(response.body.data).toHaveProperty("token");
   });
 
-  // it("Should do login with valid credentials", async() => {
-
-  // })
+  it("Should do login with valid credentials", async () => {
+    const createUser = await customerService.signUp({ email, password, phone });
+    console.log(createUser);
+  });
 });
