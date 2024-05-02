@@ -65,6 +65,23 @@ class CustomerService {
       throw new APIError("Data Not found", err);
     }
   }
+
+  async AddNewAddress(_id, userInputs) {
+    const { street, postalCode, city, country } = userInputs;
+
+    try {
+      const addressResult = await this.repository.CreateAddress({
+        _id,
+        street,
+        postalCode,
+        city,
+        country,
+      });
+      return FormateData(addressResult);
+    } catch (err) {
+      throw new APIError("Data Not found", err);
+    }
+  }
 }
 
 module.exports = CustomerService;

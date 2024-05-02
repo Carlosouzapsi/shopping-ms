@@ -30,4 +30,26 @@ module.exports = (app) => {
       next(err);
     }
   });
+
+  app.post("/customer/address", UserAuth, async (req, res, next) => {
+    try {
+      const { _id } = req.user;
+
+      const { street, postalCode, city, country } = req.body;
+
+      const { data } = await service.AddNewAddress(_id, {
+        street,
+        postalCode,
+        city,
+        country,
+      });
+
+      return res.status(201).json({
+        message: "New address added successfully",
+        data: data,
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
 };

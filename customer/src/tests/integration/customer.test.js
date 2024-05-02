@@ -24,7 +24,8 @@ afterAll(async () => {
   await mongoServer.stop();
 });
 
-describe("Signin and signup tests", () => {
+describe("customer tests", () => {
+  let token;
   it("Should create a new user using valid credentials", async () => {
     const userData = {
       email: "test2@mail.com",
@@ -45,7 +46,7 @@ describe("Signin and signup tests", () => {
       password: "1234",
       phone: "1199999999",
     };
-    const user = await customerService.signUp(userData);
+    await customerService.signUp(userData);
 
     const response = await request(app)
       .post("/customer/login")
@@ -53,5 +54,21 @@ describe("Signin and signup tests", () => {
       .expect(200);
 
     expect(response.body.data).toHaveProperty("token");
+  });
+  it("Should create a new address", async () => {
+    const userData = {
+      email: "test2@mail.com",
+      password: "1234",
+      phone: "1199999999",
+    };
+    const newUser = await customerService.signUp(userData);
+    const signedUser = await customerService.signIn({
+      email: userData.email,
+      password: userData.password,
+    });
+    const response = await request(app)
+      .post("/customer/address")
+      .set("Authorization", `Bearer ${signedUser.data.token}`);
+    console.log(response.body);
   });
 });
