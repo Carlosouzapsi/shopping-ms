@@ -56,19 +56,34 @@ describe("customer tests", () => {
     expect(response.body.data).toHaveProperty("token");
   });
   it("Should create a new address", async () => {
+    const addressData = {
+      street: "street 001",
+      postalCode: "888-888",
+      city: "Test City",
+      country: "Test Country",
+    };
+
     const userData = {
       email: "test2@mail.com",
       password: "1234",
       phone: "1199999999",
     };
-    const newUser = await customerService.signUp(userData);
+    await customerService.signUp(userData);
     const signedUser = await customerService.signIn({
       email: userData.email,
       password: userData.password,
     });
     const response = await request(app)
       .post("/customer/address")
-      .set("Authorization", `Bearer ${signedUser.data.token}`);
-    console.log(response.body);
+      .send(addressData)
+      .set("Authorization", `Bearer ${signedUser.data.token}`)
+      .expect(201);
+    expect(response.body.data.address[0].street).toBe(addressData.street);
+    expect(response.body.data.address[0].postalCode).toBe(
+      addressData.postalCode
+    );
+    expect(response.body.data.address[0].city).toBe(addressData.city);
+    expect(response.body.data.address[0].country).toBe(addressData.country);
+    expect(response.body.data.address[0]._id).toBeDefined();
   });
 });
