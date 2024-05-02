@@ -86,4 +86,36 @@ describe("customer tests", () => {
     expect(response.body.data.address[0].country).toBe(addressData.country);
     expect(response.body.data.address[0]._id).toBeDefined();
   });
+  it("Should get user profile", async () => {
+    const addressData = {
+      street: "street 001",
+      postalCode: "888-888",
+      city: "Test City",
+      country: "Test Country",
+    };
+
+    const userData = {
+      email: "test2@mail.com",
+      password: "1234",
+      phone: "1199999999",
+    };
+    await customerService.signUp(userData);
+    const signedUser = await customerService.signIn({
+      email: userData.email,
+      password: userData.password,
+    });
+    const { id } = signedUser.data;
+    const userAdd = await customerService.AddNewAddress(id, {
+      street: addressData.street,
+      postalCode: addressData.postalCode,
+      city: addressData.city,
+      country: addressData.country,
+    });
+
+    const response = await request(app)
+      .get("/customer/profile")
+      .set("Authorization", `Bearer ${signedUser.data.token}`)
+      .expect(200);
+    // Tobe improved..
+  });
 });

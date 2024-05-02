@@ -82,6 +82,15 @@ class CustomerService {
       throw new APIError("Data Not found", err);
     }
   }
+
+  async GetProfile(id) {
+    try {
+      const existingCustomer = await this.repository.FindCustomerById({ id });
+      return existingCustomer;
+    } catch (err) {
+      throw new APIError("Data not found!", err);
+    }
+  }
 }
 
 module.exports = CustomerService;

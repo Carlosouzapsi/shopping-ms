@@ -52,4 +52,16 @@ module.exports = (app) => {
       next(err);
     }
   });
+
+  app.get("/customer/profile", UserAuth, async (req, res, next) => {
+    try {
+      const { _id } = req.user;
+      const { data } = await service.GetProfile({ _id });
+      return res.status(200).json({
+        data: data,
+      });
+    } catch (error) {
+      next(err);
+    }
+  });
 };
