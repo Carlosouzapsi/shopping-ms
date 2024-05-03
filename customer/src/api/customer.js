@@ -53,7 +53,7 @@ module.exports = (app) => {
     }
   });
 
-  app.get("/customer/profile", UserAuth, async (req, res, next) => {
+  app.get("/profile", UserAuth, async (req, res, next) => {
     try {
       const { _id } = req.user;
       const { data } = await service.GetProfile({ _id });
@@ -61,6 +61,31 @@ module.exports = (app) => {
         data: data,
       });
     } catch (error) {
+      next(err);
+    }
+  });
+
+  app.get("/shopping-details", UserAuth, async (req, res, next) => {
+    try {
+      const { _id } = req.user;
+
+      const { data } = await service.GetShoppingDetails({ _id });
+      return res.status(200).json({
+        data: data,
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  app.get("/wishlist", UserAuth, async (req, res, next) => {
+    try {
+      const { _id } = req.user;
+      const { data } = await service.GetWishList({ _id });
+      return res.status(200).json({
+        data: data,
+      });
+    } catch (err) {
       next(err);
     }
   });

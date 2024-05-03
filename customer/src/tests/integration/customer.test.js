@@ -55,6 +55,7 @@ describe("customer tests", () => {
 
     expect(response.body.data).toHaveProperty("token");
   });
+  // Tobe improved...
   it("Should create a new address", async () => {
     const addressData = {
       street: "street 001",
@@ -86,6 +87,7 @@ describe("customer tests", () => {
     expect(response.body.data.address[0].country).toBe(addressData.country);
     expect(response.body.data.address[0]._id).toBeDefined();
   });
+  // Tobe improved...
   it("Should get user profile", async () => {
     const addressData = {
       street: "street 001",
@@ -113,9 +115,56 @@ describe("customer tests", () => {
     });
 
     const response = await request(app)
-      .get("/customer/profile")
+      .get("/profile")
       .set("Authorization", `Bearer ${signedUser.data.token}`)
       .expect(200);
-    // Tobe improved..
+  });
+  // Tobe improved...
+  it("Should get shopping details", async () => {
+    const addressData = {
+      street: "street 001",
+      postalCode: "888-888",
+      city: "Test City",
+      country: "Test Country",
+    };
+
+    const userData = {
+      email: "test2@mail.com",
+      password: "1234",
+      phone: "1199999999",
+    };
+    await customerService.signUp(userData);
+    const signedUser = await customerService.signIn({
+      email: userData.email,
+      password: userData.password,
+    });
+    const response = await request(app)
+      .get("/shopping-details")
+      .set("Authorization", `Bearer ${signedUser.data.token}`);
+    console.log(response.body.data);
+  });
+  // Tobe improved...
+  it("Should get the wishlist", async () => {
+    const addressData = {
+      street: "street 001",
+      postalCode: "888-888",
+      city: "Test City",
+      country: "Test Country",
+    };
+
+    const userData = {
+      email: "test2@mail.com",
+      password: "1234",
+      phone: "1199999999",
+    };
+    await customerService.signUp(userData);
+    const signedUser = await customerService.signIn({
+      email: userData.email,
+      password: userData.password,
+    });
+    const response = await request(app)
+      .get("/wishlist")
+      .set("Authorization", `Bearer ${signedUser.data.token}`);
+    console.log(response.body.data);
   });
 });

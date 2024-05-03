@@ -92,20 +92,21 @@ class CustomerService {
     }
   }
 
-  // TODO Criar teste de integração
+  // TODO Criar teste de integração e Endpoint
   async GetShoppingDetails(id) {
     try {
       const existingCustomer = await this.repository.FindCustomerById({ id });
 
       if (existingCustomer) {
-        return FormateData({ msg: "Error" });
+        return FormateData(existingCustomer);
       }
+      return FormateData({ msg: "Error" });
     } catch (error) {
       throw new APIError("Data not Found");
     }
   }
 
-  // TODO Criar teste de integração
+  // TODO Criar teste de integração e Endpoint
   async GetWishList(customerId) {
     try {
       const wishListItems = await this.repository.WishList(customerId);
@@ -115,6 +116,7 @@ class CustomerService {
     }
   }
 
+  // TODO Criar teste de integração e Endpoint
   async AddToWishList(customerId, product) {
     try {
       const wishListResult = await this.repository.AddWishlistItem(
@@ -127,17 +129,56 @@ class CustomerService {
     }
   }
 
-  async ManageCart(customerId, product, qty, isRemoved) {
+  // TODO Criar teste de integração e Endpoint
+  async ManageCart(customerId, product, qty, isRemove) {
     try {
       const cartResult = await this.repository.addCartItem(
         customerId,
         product,
         qty,
-        isRemoved
+        isRemove
       );
       return FormateData(cartResult);
     } catch (err) {
       throw new APIError("Data not found", err);
+    }
+  }
+
+  // TODO Criar teste de integração e Endpoint
+  async ManageOrder(customerId, order) {
+    try {
+      const orderResult = await this.repository.AddOrderProfile(
+        customerId,
+        order
+      );
+      return FormateData(orderResult);
+    } catch (error) {
+      throw new APIError("Data not found", err);
+    }
+  }
+
+  // TODO Criar teste de integração e Endpoint
+  async SubscribeEvents(payload) {
+    const { event, data } = payload;
+
+    const { userId, product, order, qty } = data;
+
+    switch (event) {
+      case "ADD_TO_WISHLIST":
+      case "REMOVE_FROM_WISHLIST":
+        this.AddToWishList(userId, product);
+        break;
+      case "ADD_TO_CART":
+        this.ManageCart(userId, product, qty, false);
+        break;
+      case "REMOVE_FROM_CART":
+        this.ManageCart(userId, product, qty, true);
+        break;
+      case "CREATE_ORDER":
+        this.ManageOrder(userId, order);
+        break;
+      default:
+        break;
     }
   }
 }
