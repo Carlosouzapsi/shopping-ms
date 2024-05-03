@@ -91,6 +91,55 @@ class CustomerService {
       throw new APIError("Data not found!", err);
     }
   }
+
+  // TODO Criar teste de integração
+  async GetShoppingDetails(id) {
+    try {
+      const existingCustomer = await this.repository.FindCustomerById({ id });
+
+      if (existingCustomer) {
+        return FormateData({ msg: "Error" });
+      }
+    } catch (error) {
+      throw new APIError("Data not Found");
+    }
+  }
+
+  // TODO Criar teste de integração
+  async GetWishList(customerId) {
+    try {
+      const wishListItems = await this.repository.WishList(customerId);
+      return FormateData(wishListItems);
+    } catch (error) {
+      throw new APIError("Data not found", err);
+    }
+  }
+
+  async AddToWishList(customerId, product) {
+    try {
+      const wishListResult = await this.repository.AddWishlistItem(
+        customerId,
+        product
+      );
+      return FormateData(wishListResult);
+    } catch (err) {
+      throw new APIError("Data not found", err);
+    }
+  }
+
+  async ManageCart(customerId, product, qty, isRemoved) {
+    try {
+      const cartResult = await this.repository.addCartItem(
+        customerId,
+        product,
+        qty,
+        isRemoved
+      );
+      return FormateData(cartResult);
+    } catch (err) {
+      throw new APIError("Data not found", err);
+    }
+  }
 }
 
 module.exports = CustomerService;
