@@ -21,7 +21,7 @@ afterAll(async () => {
 });
 
 describe("customer tests", () => {
-  it("should create a new product", async () => {
+  it("Should create a new product", async () => {
     const productData = {
       name: "product1",
       desc: "desc prod1",
@@ -36,5 +36,31 @@ describe("customer tests", () => {
 
     console.log(productResult);
     expect(productResult).toHaveProperty("_id");
+  });
+  it("Should list all products", async () => {
+    const prod1 = {
+      name: "product1",
+      desc: "desc prod1",
+      banner: "banner1",
+      type: "typeTest",
+      unit: 1,
+      price: 30.0,
+      available: true,
+      suplier: "testSupplier",
+    };
+    const prod2 = {
+      name: "product1",
+      desc: "desc prod1",
+      banner: "banner1",
+      type: "typeTest",
+      unit: 1,
+      price: 30.0,
+      available: true,
+      suplier: "testSupplier",
+    };
+    await productRepository.CreateProduct(prod1);
+    await productRepository.CreateProduct(prod2);
+    const prodList = await productRepository.Products();
+    expect(prodList).toHaveLength(2);
   });
 });

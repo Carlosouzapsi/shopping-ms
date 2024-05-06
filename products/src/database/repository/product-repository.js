@@ -1,5 +1,9 @@
 const { ProductModel } = require("../models");
-const { APIError, BadRequestError } = require("../../utils/app-errors");
+const {
+  APIError,
+  BadRequestError,
+  STATUS_CODES,
+} = require("../../utils/app-errors");
 
 class ProductRepository {
   async CreateProduct({
@@ -31,6 +35,18 @@ class ProductRepository {
         "API Error",
         STATUS_CODES.INTERNAL_ERROR,
         "Unable to create Product"
+      );
+    }
+  }
+
+  async Products() {
+    try {
+      return await ProductModel.find();
+    } catch (err) {
+      throw APIError(
+        "API Error",
+        STATUS_CODES.INTERNAL_ERROR,
+        "Unable to Get Products"
       );
     }
   }
