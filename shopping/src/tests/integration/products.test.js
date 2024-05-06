@@ -24,6 +24,4 @@ afterAll(async () => {
   await mongoServer.stop();
 });
 
-describe("products tests", () => {
-  it("Should create a new product", async () => {});
-});
+describe("products tests", () => {});
