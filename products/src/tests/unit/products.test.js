@@ -98,7 +98,7 @@ describe("customer tests", () => {
     );
     expect(productData.type).toBe(productResultByCategory[0].type);
   });
-  // WIP
+  // To be improved
   it("Should find selected products", async () => {
     const productData1 = {
       name: "product1",
@@ -126,6 +126,8 @@ describe("customer tests", () => {
     const selectedProductsResult = await productRepository.FindSelectedProducts(
       selectedItemsbyId
     );
-    console.log(selectedProductsResult);
+    expect(selectedItemsbyId).toHaveLength(2);
+    expect(selectedItemsbyId[0]._id).toBe(productResult1._id);
+    expect(selectedItemsbyId[1]._id).toBe(productResult2._id);
   });
 });
