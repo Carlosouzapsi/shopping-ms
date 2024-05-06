@@ -50,6 +50,47 @@ class ProductRepository {
       );
     }
   }
+
+  async FindById(id) {
+    try {
+      return await ProductModel.findById(id);
+    } catch (err) {
+      throw APIError(
+        "API Error",
+        STATUS_CODES.INTERNAL_ERROR,
+        "Unable to Find Product"
+      );
+    }
+  }
+
+  async FindByCategory(category) {
+    try {
+      const products = await ProductModel.find({ type: category });
+      return products;
+    } catch (err) {
+      throw APIError(
+        "API Error",
+        STATUS_CODES.INTERNAL_ERROR,
+        "Unable to Find Category"
+      );
+    }
+  }
+
+  async FindSelectedProducts(selectedIds) {
+    try {
+      const products = await ProductModel.find()
+        .where("_id")
+        .in(selectedIds.map((_id) => _id))
+        .exec();
+      return products;
+    } catch (err) {
+      throw new APIError(
+        "API Error",
+        STATUS_CODES.INTERNAL_ERROR,
+        "Unable to Find Product"
+      );
+    }
+  }
 }
 
 module.exports = ProductRepository;
