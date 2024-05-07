@@ -20,17 +20,17 @@ afterAll(async () => {
   await mongoServer.stop();
 });
 
-describe("customer tests", () => {
+describe("products tests", () => {
   it("Should create a new product", async () => {
     const productData = {
       name: "product1",
       desc: "desc prod1",
-      banner: "banner1",
       type: "typeTest",
       unit: 1,
       price: 30.0,
       available: true,
       suplier: "testSupplier",
+      banner: "banner1",
     };
     const productResult = await productRepository.CreateProduct(productData);
 

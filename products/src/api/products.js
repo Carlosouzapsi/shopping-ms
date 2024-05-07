@@ -1,88 +1,26 @@
-const ProductsService = require("../services/products-service");
+const ProductService = require("../services/products-service");
+const { PublishCustomerEvent, PublishShoppingEvent } = require("../utils");
 const UserAuth = require("./middlewares/auth");
 
 module.exports = (app) => {
-  const service = new ProductsService();
+  const service = new ProductService();
 
-  app.post("/customer/signup", async (req, res, next) => {
+  app.post("/product/create", async (req, res, next) => {
     try {
-      const { email, password, phone } = req.body;
-      const { data } = await service.signUp({ email, password, phone });
+      const { name, desc, type, unit, price, available, suplier, banner } =
+        req.body;
+      const { data } = await service.CreateProduct({
+        name,
+        desc,
+        type,
+        unit,
+        price,
+        available,
+        suplier,
+        banner,
+      });
       return res.status(201).json({
-        message: "Customer signed up successfully",
-        data: data,
-      });
-    } catch (err) {
-      next(err);
-    }
-  });
-
-  app.post("/customer/login", async (req, res, next) => {
-    try {
-      const { email, password } = req.body;
-
-      const { data } = await service.signIn({ email, password });
-
-      return res.status(200).json({
-        data: data,
-      });
-    } catch (err) {
-      next(err);
-    }
-  });
-
-  app.post("/customer/address", UserAuth, async (req, res, next) => {
-    try {
-      const { _id } = req.user;
-
-      const { street, postalCode, city, country } = req.body;
-
-      const { data } = await service.AddNewAddress(_id, {
-        street,
-        postalCode,
-        city,
-        country,
-      });
-
-      return res.status(201).json({
-        message: "New address added successfully",
-        data: data,
-      });
-    } catch (err) {
-      next(err);
-    }
-  });
-
-  app.get("/profile", UserAuth, async (req, res, next) => {
-    try {
-      const { _id } = req.user;
-      const { data } = await service.GetProfile({ _id });
-      return res.status(200).json({
-        data: data,
-      });
-    } catch (error) {
-      next(err);
-    }
-  });
-
-  app.get("/shopping-details", UserAuth, async (req, res, next) => {
-    try {
-      const { _id } = req.user;
-
-      const { data } = await service.GetShoppingDetails({ _id });
-      return res.status(200).json({
-        data: data,
-      });
-    } catch (err) {
-      next(err);
-    }
-  });
-
-  app.get("/wishlist", UserAuth, async (req, res, next) => {
-    try {
-      const { _id } = req.user;
-      const { data } = await service.GetWishList({ _id });
-      return res.status(200).json({
+        message: "Product created successfully",
         data: data,
       });
     } catch (err) {

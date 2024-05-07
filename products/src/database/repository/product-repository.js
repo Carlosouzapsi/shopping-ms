@@ -27,7 +27,6 @@ class ProductRepository {
         suplier,
         banner,
       });
-
       const productResult = await product.save();
       return productResult;
     } catch (err) {
