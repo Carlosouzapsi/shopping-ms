@@ -191,4 +191,20 @@ describe("products tests", () => {
       banner: "Banner02",
     };
   });
+
+  // TODO
+  it("Should add the product at the wishlist", async () => {
+    const productData1 = {
+      name: "ProductTes01",
+      desc: "descProd01",
+      type: "typeProd01",
+      unit: 1,
+      price: 50.0,
+      available: true,
+      suplier: "testSup01",
+      banner: "Banner01",
+    };
+
+    const productResult = await productService.CreateProduct(productData1);
+  });
 });
