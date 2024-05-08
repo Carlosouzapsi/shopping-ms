@@ -46,7 +46,7 @@ class ProductService {
   async GetProductsByCategory(category) {
     try {
       const products = await this.repository.FindByCategory(category);
-      return FormateDate(products);
+      return FormateData(products);
     } catch (err) {
       throw new APIError("Data not found.");
     }
@@ -66,6 +66,20 @@ class ProductService {
       return await this.repository.FindById(productId);
     } catch (err) {
       throw new APIError("Data not found.");
+    }
+  }
+
+  async GetProductPayload(userId, { productId, qty }, event) {
+    const product = await this.repository.FindById(productId);
+
+    if (product) {
+      const payload = {
+        event: event,
+        data: { userId, product, qty },
+      };
+      return FormateData(payload);
+    } else {
+      return FormateData({ error: "No product available" });
     }
   }
 }
