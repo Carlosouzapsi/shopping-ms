@@ -1,13 +1,15 @@
 const express = require("express");
 const request = require("supertest");
 const ProductService = require("../../services/product-service");
-const { PublishCustomerEvent } = require("../utils");
+// const CustomerService = require("../../../../customer/src/services/customer-service");
+const { PublishCustomerEvent } = require("../../utils");
 const { DB_URL } = require("../../config");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const mongoose = require("mongoose");
 const expressApp = require("../../express-app");
 
 const app = new express();
+// const customerService = new CustomerService();
 const productService = new ProductService();
 /* Configurar arquivo jest para rodar testes de integração
 separados dos unitários */
@@ -155,7 +157,6 @@ describe("products tests", () => {
       .send({ ids: selectedItemsbyId })
       .expect(200);
     expect(response.body.data).toHaveLength(3);
-    console.log(selectedItemsbyId[0]._id);
     expect(response.body.data[0]).toHaveProperty(
       "_id",
       selectedItemsbyId[0]._id.toString()
@@ -211,8 +212,10 @@ describe("products tests", () => {
       banner: "Banner01",
     };
 
-    const userResult = await productService.PublishCustomerEvent(userData);
-    console.log(userResult);
-    const productResult = await productService.CreateProduct(productData);
+    // const userResult = await customerService.signUp(userData);
+    // const userResult = await PublishCustomerEvent(userData);
+    // console.log(userResult);
+    // const productResult = await productService.CreateProduct(productData);
+    // console.log(productResult);
   });
 });

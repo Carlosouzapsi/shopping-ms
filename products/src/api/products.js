@@ -82,7 +82,7 @@ module.exports = (app) => {
     }
   });
 
-  app.delete("/wishlist/:id", async (req, res, next) => {
+  app.delete("/wishlist/:id", UserAuth, async (req, res, next) => {
     const { _id } = req.user;
     const productId = req.params.id;
 
