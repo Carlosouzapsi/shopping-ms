@@ -1,13 +1,13 @@
 const express = require("express");
 const request = require("supertest");
-const ProductsService = require("../../services/products-service");
+const ShoppingService = require("../../services/shopping-service");
 const { DB_URL } = require("../../config");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const mongoose = require("mongoose");
 const expressApp = require("../../express-app");
 
 const app = new express();
-const productsService = new ProductsService();
+const ShoppingService = new ShoppingService();
 /* Configurar arquivo jest para rodar testes de integração
 separados dos unitários */
 
@@ -24,4 +24,4 @@ afterAll(async () => {
   await mongoServer.stop();
 });
 
-describe("products tests", () => {});
+describe("shopping tests", () => {});
