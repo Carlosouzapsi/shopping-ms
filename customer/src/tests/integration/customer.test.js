@@ -165,6 +165,5 @@ describe("customer tests", () => {
     const response = await request(app)
       .get("/wishlist")
       .set("Authorization", `Bearer ${signedUser.data.token}`);
-    console.log(response.body.data);
   });
 });

@@ -55,6 +55,24 @@ describe("customer tests", () => {
     expect(customerAddress.postalCode).toBe(customerAddress.city);
     expect(customerAddress.city).toBe(customerAddress.country);
   });
+
+  it.only("Should Remove an existing address", async () => {
+    const customerData = await customerRepository.CreateCustomer({
+      email: "test2@email.com",
+      password: "1234",
+      phone: "1199999999",
+      address: [],
+    });
+    const addressData = await customerRepository.CreateAddress({
+      _id: customerData._id,
+      street: "street avenue 1",
+      postalCode: "55555",
+      city: "MyWonderfullTown",
+      country: "US",
+    });
+    const addressResult = addressData.address;
+    await customerRepository.RemoveAddress(customerData._id, addressResult);
+  });
   it("Should find a customer by email", async () => {
     const baseCustomer = await customerRepository.CreateCustomer({
       email: "test3@email.com",

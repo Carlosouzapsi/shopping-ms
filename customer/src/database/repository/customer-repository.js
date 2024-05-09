@@ -43,11 +43,27 @@ class CustomerRepository {
       }
 
       return await profile.save();
-    } catch (error) {
+    } catch (err) {
       throw new APIError(
         "API Error",
         STATUS_CODES.INTERNAL_ERROR,
         "Error on Create Address"
+      );
+    }
+  }
+
+  async RemoveAddress(userId, address) {
+    try {
+      const profile = await CustomerModel.findById(userId);
+      console.log("Address Id " + address);
+      if (profile) {
+        console.log("Perfil encontrado: " + profile);
+      }
+    } catch (err) {
+      throw new APIError(
+        "API Error",
+        STATUS_CODES.INTERNAL_ERROR,
+        "Error on Remove Address"
       );
     }
   }
