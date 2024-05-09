@@ -1,6 +1,7 @@
 const express = require("express");
 const request = require("supertest");
 const ProductService = require("../../services/product-service");
+const { PublishCustomerEvent } = require("../utils");
 const { DB_URL } = require("../../config");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const mongoose = require("mongoose");
@@ -194,7 +195,12 @@ describe("products tests", () => {
 
   // TODO
   it("Should add the product at the wishlist", async () => {
-    const productData1 = {
+    const userData = {
+      email: "test2@mail.com",
+      password: "1234",
+      phone: "1199999999",
+    };
+    const productData = {
       name: "ProductTes01",
       desc: "descProd01",
       type: "typeProd01",
@@ -205,6 +211,8 @@ describe("products tests", () => {
       banner: "Banner01",
     };
 
-    const productResult = await productService.CreateProduct(productData1);
+    const userResult = await productService.PublishCustomerEvent(userData);
+    console.log(userResult);
+    const productResult = await productService.CreateProduct(productData);
   });
 });
