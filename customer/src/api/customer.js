@@ -4,7 +4,7 @@ const UserAuth = require("./middlewares/auth");
 module.exports = (app) => {
   const service = new CustomerService();
 
-  app.post("/customer/signup", async (req, res, next) => {
+  app.post("/signup", async (req, res, next) => {
     try {
       const { email, password, phone } = req.body;
       const { data } = await service.signUp({ email, password, phone });
@@ -17,21 +17,19 @@ module.exports = (app) => {
     }
   });
 
-  app.post("/customer/login", async (req, res, next) => {
+  app.post("/login", async (req, res, next) => {
     try {
       const { email, password } = req.body;
 
       const { data } = await service.signIn({ email, password });
 
-      return res.status(200).json({
-        data: data,
-      });
+      return res.json(data);
     } catch (err) {
       next(err);
     }
   });
 
-  app.post("/customer/address", UserAuth, async (req, res, next) => {
+  app.post("/address", UserAuth, async (req, res, next) => {
     try {
       const { _id } = req.user;
 
@@ -44,10 +42,7 @@ module.exports = (app) => {
         country,
       });
 
-      return res.status(201).json({
-        message: "New address added successfully",
-        data: data,
-      });
+      return res.json(data);
     } catch (err) {
       next(err);
     }
@@ -57,9 +52,7 @@ module.exports = (app) => {
     try {
       const { _id } = req.user;
       const { data } = await service.GetProfile({ _id });
-      return res.status(200).json({
-        data: data,
-      });
+      return res.json(data);
     } catch (error) {
       next(err);
     }
@@ -70,9 +63,7 @@ module.exports = (app) => {
       const { _id } = req.user;
 
       const { data } = await service.GetShoppingDetails({ _id });
-      return res.status(200).json({
-        data: data,
-      });
+      return res.json(data);
     } catch (err) {
       next(err);
     }
@@ -82,9 +73,7 @@ module.exports = (app) => {
     try {
       const { _id } = req.user;
       const { data } = await service.GetWishList({ _id });
-      return res.status(200).json({
-        data: data,
-      });
+      return res.status(200).json(data);
     } catch (err) {
       next(err);
     }

@@ -12,5 +12,5 @@ app.use("/", proxy("http://localhost:8002")); // products
 app.use("/shopping", proxy("http://localhost:8003"));
 
 app.listen(8000, () => {
-  console.log(`Shopping is listening to Port 8003`);
+  console.log(`Gateway is listening to Port 8000`);
 });
